@@ -1,7 +1,17 @@
 import React from 'react';
 import style from './recipe.module.css';
 
-const Recipe = ({title, image, time, cuisine, servings, wines, ingredients, instructions, myIngredients, extraIngredients}) => {
+const Recipe = ({
+    title, 
+    image, 
+    time, 
+    cuisine, 
+    servings, 
+    wines, 
+    ingredients, 
+    instructions, 
+    myIngredients, 
+    extraIngredients}) => {
     return(
         <div className={style.recipe}>
             <h1>{title}</h1>
@@ -20,8 +30,15 @@ const Recipe = ({title, image, time, cuisine, servings, wines, ingredients, inst
             <img className={style.image} src={image} alt=""/>
             <ol>Ready in {time} minutes.</ol>
             <ol>Serves up to {servings}</ol>
-            
-            <ul>{cuisine.map((cuisine,index) =>
+            <ul>{instructions.map(instruction =>
+                    <li key={instruction.step}>{instruction.step}</li>
+                )}
+            </ul>
+            <ul>Suggested wine pairings: {wines.map((wine,index) =>
+                    <li key={index}>{wine}</li>
+                )}
+            </ul>
+            <ul>Cuisine type:{cuisine.map((cuisine,index) =>
                     <li key={index}>{cuisine}</li>
                 )}
             </ul>
