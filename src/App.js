@@ -4,44 +4,33 @@ import './App.css';
 
 const App = () => {
 
-  const APP_KEY = '0152fda4d12d43a39bc21eb12d370f55';
-  // const QUERY = 'tomato,basil';
+  const API_KEY = 'c19c8da953974bc0a7448c65be87331f';
 
   const [recipes, setRecipes] = useState([]);     //recipes gives data from api
   const [search, setSearch] = useState(""); 
-  const [QUERY, setQuery] = useState('cheese, tomato');
+  const [query, setQuery] = useState("");
 
-  useEffect(() =>{
+  useEffect(() => {
     getRecipes();
-  }, [QUERY]);    //leave ,[] empty if only want to run effect once, add counter to run more
+  }, [query]);    //leave ,[] empty if only want to run effect once, add counter to run more
 
  const getRecipes = async () => {
-   const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${QUERY}`
-   + `&sort=popularity`
-   + `&sortDirection=desc`
-   + `&number=1` 
-   + `&addRecipeInformation=true` 
-   + `&ignorePantry=true` 
-   + `&instructionsRequired=true`
-   + `&apiKey=${APP_KEY}`
+   const response = await fetch(
+     `https://api.spoonacular.com/recipes/complexSearch?query=${query}` +
+     `&sort=popularity` + 
+     `&sortDirection=desc` +
+     `&number=10` +
+     `&addRecipeInformation=true` +
+     `&ignorePantry=true` +
+     `&instructionsRequired=true` +
+     '&fillIngredients=true' +
+     `&apiKey=${API_KEY}`
    ); 
     const data = await response.json();
     setRecipes(data.results);
     console.log(data.results);
   }
 
-  // console.log(recipes.map(recipe => (
-  //   <Recipe key={recipe.title}
-  //   key={recipe.title} title={recipe.title} 
-  //   instructions={recipe.analyzedInstructions[0].map}
-    
-  //   />
-  //   ))
-  //   );
-
-  //`https://api.spoonacular.com/recipes/complexSearch?&includeIngredients=${QUERY}sort=popularity&apiKey=${APP_KEY}
-  //` https://api.spoonacular.com/recipes/findByIngredients?&ingredients=${QUERY}&ignorePantry=true&apiKey=${APP_KEY}`
-  
   const updateSearch = e => {
     setSearch(e.target.value);      //this is the value of the input
     // console.log(search);
@@ -51,7 +40,7 @@ const App = () => {
     e.preventDefault();   
     setQuery(search);
     setSearch('');      //sets search back to blank state
-  }
+  };
 
   return(
     <div className="App">
@@ -81,11 +70,14 @@ const App = () => {
             cuisine={recipe.cuisines}
             servings={recipe.servings}
             instructions={recipe["analyzedInstructions"]["0"]["steps"]}
-            wines={recipe["winePairing"]["pairedWines"]}
-            // ingredients={recipe["analyzedInstructions"]["0"]["steps"]}
-            // ingredients={recipe["analyzedInstructions"]["0"]["steps"]["0"]["ingredients"]}
-            // myIngredients={recipe.usedIngredients} 
-            // extraIngredients={recipe.unusedIngredients}
+            wines={recipe["winePairing"]["pairingText"]}
+            wineList={recipe["winePairing"]["pairedWines"]}
+            ingredients={recipe["missedIngredients"]}
+            steps={recipe["analyzedInstructions"]["0"]["steps"]}
+            sourceUrl={recipe.sourceUrl}
+            sourceName={recipe.sourceName}
+            diets={recipe.diets}
+            
           />
           ))}
           
